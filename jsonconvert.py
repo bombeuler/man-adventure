@@ -1,10 +1,10 @@
 import json
 import re
-
+from config import *
 
 class JSONConvert:
     def __init__(self, sheetName):
-        self.sheetPath = f'./assets/{sheetName}.json'
+        self.sheetPath = f'{ASSETS_PATH}/{sheetName}.json'
         self.__information = self.__convert()
 
     def __convert(self):

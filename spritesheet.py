@@ -5,7 +5,7 @@ from config import *
 
 class SpriteSheet:
     def __init__(self, sheetName):
-        sheetPath = f'./assets/{sheetName}.png'
+        sheetPath = f'{ASSETS_PATH}/{sheetName}.png'
         self.sheet = pygame.image.load(sheetPath).convert_alpha()
         self.data = JSONConvert(sheetName)
         # print(f'无法加载图片{sheetName}')
