@@ -1,12 +1,13 @@
 import pygame, sys
 from config import *
 from level import Level
+from pygame.locals import RESIZABLE,DOUBLEBUF,HWSURFACE
 
 
 class Game:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode(SCREEN_SIZE)
+        self.screen = pygame.display.set_mode(SCREEN_SIZE,RESIZABLE)
         pygame.display.set_caption(GAME_TITLE)
         self.clock = pygame.time.Clock()
         self.level = Level()

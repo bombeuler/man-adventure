@@ -18,10 +18,15 @@ class JSONConvert:
             frameInfor = spriteSheet.get('frame')
             x = frameInfor.get('x')
             y = frameInfor.get('y')
-            num = int(frameInfor.get('w') / frameInfor.get('h'))
+            h = frameInfor.get('h')
+            w = frameInfor.get('w')
+            if  h == 16:
+                num = int(w / 16)
+            else:
+                num = 1
             rectList = []
             for i in range(num):
-                rectList.append((x + i * 16, y, x + (i + 1) * 16, y + 16))
+                rectList.append((x + i * w/num, y, w / num, h))
             information[name] = rectList
         return information
 
