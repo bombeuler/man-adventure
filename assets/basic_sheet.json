@@ -1,0 +1,165 @@
+{ "frames": [
+   {
+    "filename": "Cursors.zh-CN (player).aseprite",
+    "frame": { "x": 240, "y": 0, "w": 96, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 448, "y": 1744, "w": 96, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (player_status).aseprite",
+    "frame": { "x": 80, "y": 80, "w": 64, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 192, "y": 1808, "w": 64, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (hurt_action).aseprite",
+    "frame": { "x": 0, "y": 64, "w": 160, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 352, "y": 1696, "w": 160, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (dragon).aseprite",
+    "frame": { "x": 304, "y": 64, "w": 32, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 480, "y": 1712, "w": 32, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (turtle).aseprite",
+    "frame": { "x": 240, "y": 16, "w": 96, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 320, "y": 1728, "w": 96, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (boom).aseprite",
+    "frame": { "x": 0, "y": 80, "w": 80, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 464, "y": 1792, "w": 80, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (bat).aseprite",
+    "frame": { "x": 144, "y": 80, "w": 64, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 640, "y": 1664, "w": 64, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (eneny_dead).aseprite",
+    "frame": { "x": 240, "y": 32, "w": 96, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 512, "y": 1696, "w": 96, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (buff).aseprite",
+    "frame": { "x": 160, "y": 64, "w": 144, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 304, "y": 1808, "w": 144, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (title).aseprite",
+    "frame": { "x": 0, "y": 0, "w": 160, "h": 48 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 128, "y": 1744, "w": 160, "h": 48 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (background).aseprite",
+    "frame": { "x": 0, "y": 48, "w": 176, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 464, "y": 1680, "w": 176, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (background_green).aseprite",
+    "frame": { "x": 176, "y": 48, "w": 176, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 464, "y": 1648, "w": 176, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (movebroad).aseprite",
+    "frame": { "x": 160, "y": 0, "w": 80, "h": 48 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 352, "y": 1648, "w": 80, "h": 48 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (bullet).aseprite",
+    "frame": { "x": 208, "y": 80, "w": 64, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 544, "y": 1728, "w": 64, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   },
+   {
+    "filename": "Cursors.zh-CN (creeper).aseprite",
+    "frame": { "x": 272, "y": 80, "w": 32, "h": 16 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 352, "y": 1712, "w": 32, "h": 16 },
+    "sourceSize": { "w": 704, "h": 2256 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.39-dev",
+  "image": "basic_sheet.png",
+  "format": "RGBA8888",
+  "size": { "w": 352, "h": 96 },
+  "scale": "1",
+  "layers": [
+   { "name": "player", "opacity": 255, "blendMode": "normal" },
+   { "name": "player_status", "opacity": 255, "blendMode": "normal" },
+   { "name": "hurt_action", "opacity": 255, "blendMode": "normal" },
+   { "name": "dragon", "opacity": 255, "blendMode": "normal" },
+   { "name": "turtle", "opacity": 255, "blendMode": "normal" },
+   { "name": "boom", "opacity": 255, "blendMode": "normal" },
+   { "name": "bat", "opacity": 255, "blendMode": "normal" },
+   { "name": "eneny_dead", "opacity": 255, "blendMode": "normal" },
+   { "name": "buff", "opacity": 255, "blendMode": "normal" },
+   { "name": "title", "opacity": 255, "blendMode": "normal" },
+   { "name": "background", "opacity": 255, "blendMode": "normal" },
+   { "name": "background_green", "opacity": 255, "blendMode": "normal" },
+   { "name": "movebroad", "opacity": 255, "blendMode": "normal" },
+   { "name": "bullet", "opacity": 255, "blendMode": "normal" },
+   { "name": "creeper", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
