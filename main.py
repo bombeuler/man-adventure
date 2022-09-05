@@ -7,7 +7,7 @@ from pygame.locals import RESIZABLE,DOUBLEBUF,HWSURFACE
 class Game:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode(SCREEN_SIZE,RESIZABLE)
+        self.screen = pygame.display.set_mode(SCREEN_SIZE)
         pygame.display.set_caption(GAME_TITLE)
         self.clock = pygame.time.Clock()
         self.level = Level()

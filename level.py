@@ -21,14 +21,17 @@ class Level:
     def create_map(self):
         img_list = self.basicSheet.loop_img('background',2)
         for row_index,row in enumerate(WORLD_MAP):
-            for col_index ,col in enumerate(row):
+            for col_index ,grid in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
-            match col :
-                case 'x':
-                    Tile((x,y),[self.visible_sprites],img_list[5])
+                match grid :
+                    case 'x':
+                        Tile((x,y),[self.visible_sprites],img_list[6])
+                    case 'g':
+                        Tile((x,y),[self.visible_sprites],img_list[4])
+                    case ' ':
+                        Tile((x,y),[self.visible_sprites],img_list[3])
 
     def run(self, dt):
-        self.display_surface.fill("black")
         self.visible_sprites.draw(self.display_surface)
         # self.all_sprites.update(dt)
