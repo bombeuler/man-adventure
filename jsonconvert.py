@@ -5,8 +5,9 @@ import re
 class JSONConvert:
     def __init__(self, sheetName):
         self.sheetPath = f'./assets/{sheetName}.json'
+        self.__information = self.__convert()
 
-    def __call__(self):
+    def __convert(self):
         with open(self.sheetPath, 'r') as f:
             basicSheetJson = json.load(f)
 
@@ -22,5 +23,7 @@ class JSONConvert:
             for i in range(num):
                 rectList.append((x + i * 16, y, x + (i + 1) * 16, y + 16))
             information[name] = rectList
-
         return information
+
+    def query(self, param):
+        return self.__information.get(param)
