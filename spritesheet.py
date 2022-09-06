@@ -19,7 +19,7 @@ class SpriteSheet:
         image = pygame.transform.scale(image, (scale * w, scale * h))
         return image
 
-    def loop_img(self, name, scale=1):
+    def loop_img(self, name, scale=2):
         rectLists = self.data.query(name)
         img_list = []
         for rect in rectLists:

@@ -1,9 +1,10 @@
 import pygame
 from config import *
-from jsonconvert import JSONConvert
 from spritesheet import SpriteSheet
 from player import Player
 from tile import Tile
+from debug import debug
+
 
 class Level:
     def __init__(self):
@@ -19,19 +20,19 @@ class Level:
         self.create_map()
 
     def create_map(self):
-        img_list = self.basicSheet.loop_img('background',2)
+        bgImg = self.basicSheet.loop_img('background',2)
+        playerImg = self.basicSheet.loop_img('player',2)
         for row_index,row in enumerate(WORLD_MAP):
             for col_index ,grid in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
                 match grid :
                     case 'x':
-                        Tile((x,y),[self.visible_sprites],img_list[6])
-                    case 'g':
-                        Tile((x,y),[self.visible_sprites],img_list[4])
-                    case ' ':
-                        Tile((x,y),[self.visible_sprites],img_list[3])
+                        Tile((x,y),[self.visible_sprites],bgImg[6])
+                    case 'p':
+                        self.player = Player((x,y),[self.visible_sprites],playerImg[2])
 
     def run(self, dt):
         self.visible_sprites.draw(self.display_surface)
-        # self.all_sprites.update(dt)
+        self.visible_sprites.update(dt)
+        debug(len(self.visible_sprites))

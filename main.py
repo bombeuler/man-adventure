@@ -1,7 +1,7 @@
 import pygame, sys
 from config import *
 from level import Level
-from pygame.locals import RESIZABLE,DOUBLEBUF,HWSURFACE
+from pygame.locals import RESIZABLE, DOUBLEBUF, HWSURFACE
 
 
 class Game:
@@ -18,7 +18,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-
+            self.screen.fill('black')
             dt = self.clock.tick() / 1000
             self.level.run(dt)
             pygame.display.update()
