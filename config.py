@@ -4,7 +4,7 @@ import os
 SCALE_RATE = 3
 TILESIZE = 16 * SCALE_RATE
 
-SCREEN_SIZE = (800, 600)  # 25,25
+SCREEN_SIZE = (1200, 800)  # 25,25
 GAME_TITLE = "男人的冒险"
 FPS = 60
 
