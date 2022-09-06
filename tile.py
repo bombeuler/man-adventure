@@ -7,3 +7,4 @@ class Tile(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = image
         self.rect = self.image.get_rect(topleft=pos)
+        self.hitbox = self.rect.inflate(0,-6 * SCALE_RATE)
