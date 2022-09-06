@@ -18,7 +18,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            self.screen.fill('black')
+            self.screen.fill(pygame.Color(255,255,255,255))
             dt = self.clock.tick() / 1000
             self.level.run(dt)
             pygame.display.update()
