@@ -7,6 +7,7 @@ TILESIZE = 16 * SCALE_RATE
 SCREEN_SIZE = (1200, 800)  # 25,25
 GAME_TITLE = "男人的冒险"
 FPS = 60
+TOTAL_TIME = 60000
 
 # 项目路径设置
 ASSETS_PATH = os.path.abspath("./assets")
