@@ -6,6 +6,8 @@ from player import Player
 from tile import Tile
 from debug import debug
 from tilemap import TileMap
+from animationSprite import AnimationSprite
+from enemy import Enemy
 
 
 class Level:
@@ -13,13 +15,22 @@ class Level:
         # 获取显示表面
         self.displaySurface = pygame.display.get_surface()
         self.basicSheet = SpriteSheet('basic_sheet')
+
+        # 储存怪物列表
+        self.monosterImages = {}
+        for k,_ in monosterData.items():
+            self.monosterImages[k]=self.basicSheet.loop_img(k,SCALE_RATE)
+
+        self.hurtImages = self.basicSheet.loop_img('hurt_action',SCALE_RATE)
+
         # sprite groups
         self.visibleSprites = YSortCameraGroup()
-        self.bulletSprites = pygame.sprite.Group()
         self.obstaclesSprites = pygame.sprite.Group()
 
         # sprite setup
         self.create_map()
+        self.startTime = pygame.time.get_ticks()
+        self.spawnTime = pygame.time.get_ticks()
 
     def create_map(self):
         thingMap = TileMap('things').get_map()
@@ -34,7 +45,8 @@ class Level:
                     y = rowIndex * TILESIZE
                     match col :
                         case '71':
-                            Tile((x,y),[self.obstaclesSprites,self.visibleSprites],bgImg[5])
+                            AnimationSprite((x,y),[self.obstaclesSprites,self.visibleSprites],bgImg[5:7],0.05)
+                            # Tile((x,y),[self.obstaclesSprites,self.visibleSprites],bgImg[5])
                         case '73':
                             Tile((x,y),[self.obstaclesSprites,self.visibleSprites],bgImg[7])
                         case '76':
@@ -42,13 +54,20 @@ class Level:
         
         # 绘制玩家
 
-        self.player = Player((SCALE_RATE*1600,SCALE_RATE*1600),[self.obstaclesSprites,self.visibleSprites],self.obstaclesSprites,[self.bulletSprites,self.visibleSprites],playerImg)
+        self.player = Player((SCALE_RATE*1600,SCALE_RATE*1600),[self.visibleSprites],self.obstaclesSprites,[self.visibleSprites],playerImg)
+
+    def spawn_enemy(self):
+        nowTime = pygame.time.get_ticks()
+        timeInterval = 1500
+        if nowTime - self.spawnTime >=timeInterval:
+            Enemy('bat',self.player,self.monosterImages,(SCALE_RATE*1600,SCALE_RATE*1800),[self.visibleSprites],self.obstaclesSprites)
+            self.spawnTime = nowTime
+
 
     def run(self, dt):
+        self.spawn_enemy()
         self.visibleSprites.custom_draw(self.player)
         self.visibleSprites.update(dt)
-        self.bulletSprites.draw(self.displaySurface)
-        self.bulletSprites.update(dt)
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
@@ -58,7 +77,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         background = pygame.image.load(f'{ASSETS_PATH}/background.png').convert_alpha()
         bgX = background.get_rect().w
         bgY = background.get_rect().h
-        self.background = pygame.transform.scale(background,(SCALE_RATE * bgX,SCALE_RATE *bgY))
+        self.background = pygame.transform.scale(background,(SCALE_RATE * bgX,SCALE_RATE * bgY))
 
         self.bgRect = self.background.get_rect(topleft=(0,0))
 
@@ -76,6 +95,12 @@ class YSortCameraGroup(pygame.sprite.Group):
         bgOffsetPos = self.bgRect.topleft - self.offset
         self.displaySurface.blit(self.background,bgOffsetPos)
 
-        for sprite in sorted(self.sprites(),key = lambda sprite: sprite.rect.centery):
+        for sprite in self.sort_by(self.sprites()):
             offsetPos = sprite.rect.topleft - self.offset
             self.displaySurface.blit(sprite.image,offsetPos)
+
+    def sort_by(self,sprites):
+        sorted1 = sorted(sprites,key = lambda sprite:sprite.rect.centery)
+        sorted2 = sorted(sorted1,key = lambda sprite:1 if sprite.fly else 0)
+
+        return sorted2

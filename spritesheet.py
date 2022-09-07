@@ -2,7 +2,6 @@ import pygame
 from jsonconvert import JSONConvert
 from config import *
 from pygame.locals import SRCALPHA
-from debug import debug
 
 class SpriteSheet:
     def __init__(self, sheetName):

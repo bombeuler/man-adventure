@@ -2,14 +2,15 @@ import pygame
 from pygame.math import Vector2
 from config import *
 from bullet import Bullet
-from debug import debug
+from entity import Entity
 
 
-class Player(pygame.sprite.Sprite):
+class Player(Entity):
     def __init__(self, pos, group, obstacleSprites, bulletSprites,imageList):
-        super().__init__(group)
+        super().__init__(group,obstacleSprites)
 
         # 基本属性
+        self.spriteType = 'player'
         self.imageList = imageList
         self.image = self.imageList[2]
         self.rect = self.image.get_rect(center=pos)
@@ -17,11 +18,8 @@ class Player(pygame.sprite.Sprite):
 
         # 状态和动画
         self.status = {'face': 'down', 'display': 'idle'}
-        self.frameIndex = 0
-        self.animationSpeed = 0.15
 
         # 物理属性
-        self.direction = Vector2((0, 0))
         self.pos = Vector2(self.hitbox.center)
         self.speed = PLAYER_MAXSPEED
 
@@ -29,11 +27,11 @@ class Player(pygame.sprite.Sprite):
         self.shootDirection = Vector2()
         self.shooting = False
         self.shootingCooldown = 400
-        self.bulletSpeed = 10
+        self.bulletSpeed = BULLET_MINSPEED
         self.shootTime = None
 
-        self.obstacleSprites = obstacleSprites
         self.bulletSprites = bulletSprites
+
 
     def get_animation_key(self,status):
         match status['face']:
@@ -80,7 +78,6 @@ class Player(pygame.sprite.Sprite):
                                   or keys[pygame.K_w] or keys[pygame.K_s]):
             self.shooting = True
             self.shootTime = pygame.time.get_ticks()
-            print('shoot')
             shootVector = Vector2()
             if keys[pygame.K_a]:
                 shootVector.x -= 1
@@ -99,7 +96,7 @@ class Player(pygame.sprite.Sprite):
                 shootVector = shootVector.normalize()
             self.shootDirection = shootVector
 
-            self.shoot()
+            self.shoot(self.bulletSpeed)
 
     # 获取状态
     def get_status(self):
@@ -114,40 +111,11 @@ class Player(pygame.sprite.Sprite):
             if self.status['display'] !='shoot':
                 self.status['display'] = 'shoot'
 
-    # 玩家移动
-    def move(self, speed):
-        self.hitbox.x += self.direction.x * speed
-        self.collision('horizontal')
-        self.hitbox.y += self.direction.y * speed
-        self.collision('vertical')
-        self.rect.center = self.hitbox.center
-
     # 玩家射击
-    def shoot(self):
-        print(self.shootDirection)
+    def shoot(self,speed):
         x = self.rect.center[0] + 40*self.shootDirection.x
         y = self.rect.center[1] + 40*self.shootDirection.y
-        debug((x,y))
-        Bullet(self.bulletSprites,(x,y),self.bulletSpeed,self.shootDirection)
-
-
-    # 玩家碰撞
-    def collision(self, direction):
-        if direction == 'horizontal':
-            for sprite in self.obstacleSprites:
-                if sprite.hitbox.colliderect(self.hitbox) and sprite != self:
-                    if self.direction.x > 0:
-                        self.hitbox.right = sprite.hitbox.left
-                    if self.direction.x < 0:
-                        self.hitbox.left = sprite.hitbox.right
-
-        if direction == 'vertical':
-            for sprite in self.obstacleSprites:
-                if sprite.hitbox.colliderect(self.hitbox) and sprite != self:
-                    if self.direction.y > 0:
-                        self.hitbox.bottom = sprite.hitbox.top
-                    if self.direction.y < 0:
-                        self.hitbox.top = sprite.hitbox.bottom
+        Bullet(self.bulletSprites,(x,y),speed,self.shootDirection)
 
     # 射击冷却
     def cooldowns(self):
