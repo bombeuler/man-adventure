@@ -4,7 +4,7 @@ from config import *
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, groups, pos, speed, direction):
+    def __init__(self, groups, pos, speed,damage, direction,origin):
         super().__init__(groups)
         self.spriteType = 'bullet'
         self.fly =True
@@ -14,8 +14,11 @@ class Bullet(pygame.sprite.Sprite):
                                             (SCALE_RATE * 4, SCALE_RATE * 4))
         self.rect = self.image.get_rect(center=pos)
         self.speed = speed
+        self.once = True
+        self.damage = damage
         self.distance = 0
         self.direction = direction
+        self.origin = origin
 
     def __getattr__(self, _):
             return None

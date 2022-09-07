@@ -1,3 +1,4 @@
+from tokenize import group
 import pygame
 from pygame.math import Vector2
 from config import *
@@ -19,19 +20,25 @@ class Level:
         # 储存怪物列表
         self.monosterImages = {}
         for k,_ in monosterData.items():
-            self.monosterImages[k]=self.basicSheet.loop_img(k,SCALE_RATE)
+            if k == 'dragon':
+                self.monosterImages[k]=self.basicSheet.loop_img(k,2*SCALE_RATE)
+            else:
+                self.monosterImages[k]=self.basicSheet.loop_img(k,SCALE_RATE)
 
         self.hurtImages = self.basicSheet.loop_img('hurt_action',SCALE_RATE)
 
-        # sprite groups
-        self.visibleSprites = YSortCameraGroup()
-        self.obstaclesSprites = pygame.sprite.Group()
+        # 精灵组
+        self.visibleSprites = YSortCameraGroup() # 可视组
+        self.obstaclesSprites = pygame.sprite.Group() # 物理碰撞
+        self.hurtingSprites = pygame.sprite.Group() # 造成伤害
+        self.hurtSprites = pygame.sprite.Group() # 受到伤害
 
-        # sprite setup
+        # 精灵初始化
         self.create_map()
         self.startTime = pygame.time.get_ticks()
         self.spawnTime = pygame.time.get_ticks()
 
+    # 初始化地图
     def create_map(self):
         thingMap = TileMap('things').get_map()
         bgImg = self.basicSheet.loop_img('background',SCALE_RATE)
@@ -54,20 +61,46 @@ class Level:
         
         # 绘制玩家
 
-        self.player = Player((SCALE_RATE*1600,SCALE_RATE*1600),[self.visibleSprites],self.obstaclesSprites,[self.visibleSprites],playerImg)
+        self.player = Player((SCALE_RATE*1600,SCALE_RATE*1600),[self.visibleSprites,self.hurtSprites],self.obstaclesSprites,[self.visibleSprites,self.hurtingSprites],playerImg)
 
+
+    # 生成怪物
     def spawn_enemy(self):
         nowTime = pygame.time.get_ticks()
         timeInterval = 1500
         if nowTime - self.spawnTime >=timeInterval:
-            Enemy('bat',self.player,self.monosterImages,(SCALE_RATE*1600,SCALE_RATE*1800),[self.visibleSprites],self.obstaclesSprites)
+            Enemy('creeper',self.player,self.monosterImages,(SCALE_RATE*1600,SCALE_RATE*1800),[self.visibleSprites,self.hurtSprites,self.hurtingSprites],self.obstaclesSprites)
             self.spawnTime = nowTime
 
+    # 攻击与被攻击逻辑
+    def hurt_hurting_logic(self):
+        if self.hurtingSprites:
+            for hurtingSprite in self.hurtingSprites:
+                collisionSprites = pygame.sprite.spritecollide(hurtingSprite,self.hurtSprites,False)
+                if collisionSprites:
+                    for targetSprite in collisionSprites:
+                        if targetSprite.spriteType !=hurtingSprite.origin.spriteType:
+                            self.damage_judge(hurtingSprite,targetSprite)
+
+    # 伤害判定
+    def damage_judge(self,hurtingSprite,targetSprite):
+        damage = hurtingSprite.damage
+        nowHealth = targetSprite.health
+        if damage >=nowHealth:
+            targetSprite.health = 0
+            targetSprite.kill()
+        else:
+            targetSprite.health = nowHealth - damage
+        if hurtingSprite.once:
+            hurtingSprite.kill()
 
     def run(self, dt):
         self.spawn_enemy()
         self.visibleSprites.custom_draw(self.player)
         self.visibleSprites.update(dt)
+        self.visibleSprites.enemy_update(self.player)
+        self.hurt_hurting_logic()
+        debug(self.player.health)
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
@@ -104,3 +137,8 @@ class YSortCameraGroup(pygame.sprite.Group):
         sorted2 = sorted(sorted1,key = lambda sprite:1 if sprite.fly else 0)
 
         return sorted2
+
+    def enemy_update(self,player):
+        enemySprites = [sprite for sprite in self.sprites() if sprite.spriteType =='enemy']
+        for enemy in enemySprites:
+            enemy.enemy_update(player)
