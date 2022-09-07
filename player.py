@@ -43,15 +43,14 @@ class Player(Entity):
         else:
             decide = "face"
 
-        match status[decide]:
-            case "up":
-                return 1
-            case "right":
-                return 2
-            case "down":
-                return 3
-            case "left":
-                return 4
+        if status[decide] == 'up':
+            return 1
+        elif status[decide] == "right":
+            return 2
+        elif status[decide] == "down":
+            return 3
+        elif status[decide] == "left":
+            return 4
 
     # 用户按键操作
     def input(self):

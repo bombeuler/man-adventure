@@ -1,5 +1,6 @@
 import pygame
 from pygame.math import Vector2
+from math import log1p
 from config import *
 from spritesheet import SpriteSheet
 from player import Player
@@ -8,6 +9,7 @@ from debug import debug
 from tilemap import TileMap
 from animationSprite import AnimationSprite
 from enemy import Enemy
+from random import random
 
 
 class Level:
@@ -27,6 +29,7 @@ class Level:
         self.hurtImages = self.basicSheet.loop_img("hurt_action", SCALE_RATE)
         self.greenDeadImg = self.basicSheet.loop_img("enemy_dead", SCALE_RATE)
         self.redDeadImg = self.basicSheet.loop_img("redead", SCALE_RATE)
+        self.whiteImg = self.basicSheet.loop_img("movebroad", SCALE_RATE)
 
         # 精灵组
         self.visibleSprites = YSortCameraGroup()  # 可视组
@@ -52,26 +55,25 @@ class Level:
                 if col != "-1":
                     x = colIndex * TILESIZE
                     y = rowIndex * TILESIZE
-                    match col:
-                        case "71":
-                            AnimationSprite(
-                                (x, y),
-                                [self.obstaclesSprites, self.visibleSprites],
-                                bgImg[5:7],
-                                0.05,
+                    if col == '71':
+                        AnimationSprite(
+                            (x, y),
+                            [self.obstaclesSprites, self.visibleSprites],
+                            bgImg[5:7],
+                            0.05,
                             )
-                        case "73":
-                            Tile(
-                                (x, y),
-                                [self.obstaclesSprites, self.visibleSprites],
-                                bgImg[7],
+                    elif col == "73":
+                        Tile(
+                            (x, y),
+                            [self.obstaclesSprites, self.visibleSprites],
+                            bgImg[7],
                             )
-                        case "76":
-                            Tile(
-                                (x, y),
-                                [self.obstaclesSprites, self.visibleSprites],
-                                bgImg[10],
-                            )
+                    elif col == "76":
+                        Tile(
+                            (x, y),
+                            [self.obstaclesSprites, self.visibleSprites],
+                            bgImg[10],
+                        )
 
         # 绘制玩家
 
@@ -87,18 +89,29 @@ class Level:
 
     def spawn_enemy(self):
         nowTime = pygame.time.get_ticks()
-        timeInterval = 1500
-        if nowTime - self.spawnTime >= timeInterval:
-            Enemy(
-                "creeper",
-                self.player,
-                self.monosterImages,
-                self.greenDeadImg,
-                (SCALE_RATE * 1600, SCALE_RATE * 1800),
-                [self.visibleSprites, self.hurtSprites, self.hurtingSprites],
-                self.obstaclesSprites,
-            )
+        totalEnemy = int(7*log1p(nowTime))
+        spawnEnemy = totalEnemy - len([sprites for sprites in self.hurtingSprites if sprites.spriteType == 'enemy'])
+        timeInterval = 1000
+        if nowTime - self.spawnTime >= timeInterval and spawnEnemy:
+            for i in range(spawnEnemy):
+                enemySeed = random()
+                if enemySeed:
+                    Enemy(
+                    "creeper",
+                    self.player,
+                    self.monosterImages,
+                    self.greenDeadImg,
+                    (SCALE_RATE * 1600, SCALE_RATE * 1800),
+                    [self.visibleSprites, self.hurtSprites, self.hurtingSprites],
+                    self.obstaclesSprites,
+                    )
             self.spawnTime = nowTime
+
+    # 怪物选择区段
+    def choose_enemy(self,nowTime):
+
+        return (e1,e2,e3,e4)
+
 
     # 攻击与被攻击逻辑
     def hurt_hurting_logic(self):
