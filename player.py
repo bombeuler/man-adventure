@@ -6,26 +6,28 @@ from entity import Entity
 
 
 class Player(Entity):
-    def __init__(self, pos, group, obstacleSprites, bulletSprites,imageList):
-        super().__init__(group,obstacleSprites)
+    def __init__(self, pos, group, obstacleSprites, bulletSprites, imageList):
+        super().__init__(group, obstacleSprites)
 
         # 基本属性
-        self.spriteType = 'player'
+        self.spriteType = "player"
         self.imageList = imageList
         self.image = self.imageList[2]
         self.rect = self.image.get_rect(center=pos)
         self.hitbox = self.rect.inflate(0, -6 * SCALE_RATE)
 
         # 状态和动画
-        self.status = {'face': 'down', 'shootFace':'down','display': 'idle'}
+        self.status = {"face": "down", "shootFace": "down", "display": "idle"}
         self.pos = Vector2(self.hitbox.center)
 
         # 用户属性
-        self.speed = PLAYER_MAXSPEED # 移动速度
-        self.shootingCooldown = 400 # 子弹冷却
-        self.bulletSpeed = BULLET_MINSPEED # 射击速度
-        self.health = 4 # 生命值
+        self.speed = PLAYER_MAXSPEED  # 移动速度
+        self.shootingCooldown = 400  # 子弹冷却
+        self.bulletSpeed = BULLET_MINSPEED  # 射击速度
+        self.health = 4  # 生命值
         self.bulletDamage = 1
+        self.stopHurt = False
+        self.hurtTime = 0
 
         # 射击
         self.shootDirection = Vector2()
@@ -35,23 +37,21 @@ class Player(Entity):
 
         self.bulletSprites = bulletSprites
 
-
-    def get_animation_key(self,status):
+    def get_animation_key(self, status):
         if self.shooting:
-            decide = 'shootFace'
+            decide = "shootFace"
         else:
-            decide = 'face'
+            decide = "face"
 
         match status[decide]:
-            case 'up':
+            case "up":
                 return 1
-            case 'right':
+            case "right":
                 return 2
-            case 'down':
+            case "down":
                 return 3
-            case 'left':
+            case "left":
                 return 4
-
 
     # 用户按键操作
     def input(self):
@@ -61,45 +61,49 @@ class Player(Entity):
         directionVector = Vector2()
         if keys[pygame.K_w]:
             directionVector.y -= 1
-            self.status['face'] = 'up'
-            self.status['display'] = 'run'
+            self.status["face"] = "up"
+            self.status["display"] = "run"
         elif keys[pygame.K_s]:
             directionVector.y += 1
-            self.status['face'] = 'down'
-            self.status['display'] = 'run'
+            self.status["face"] = "down"
+            self.status["display"] = "run"
 
         if keys[pygame.K_a]:
             directionVector.x -= 1
-            self.status['face'] = 'left'
-            self.status['display'] = 'run'
+            self.status["face"] = "left"
+            self.status["display"] = "run"
         elif keys[pygame.K_d]:
             directionVector.x += 1
-            self.status['face'] = 'right'
-            self.status['display'] = 'run'
+            self.status["face"] = "right"
+            self.status["display"] = "run"
 
         if directionVector.magnitude() != 0:
             directionVector = directionVector.normalize()
         self.direction = directionVector
 
         # 玩家攻击指令
-        if not self.shooting and (keys[pygame.K_UP] or keys[pygame.K_RIGHT]
-                                  or keys[pygame.K_DOWN] or keys[pygame.K_LEFT]):
+        if not self.shooting and (
+            keys[pygame.K_UP]
+            or keys[pygame.K_RIGHT]
+            or keys[pygame.K_DOWN]
+            or keys[pygame.K_LEFT]
+        ):
             self.shooting = True
             self.shootTime = pygame.time.get_ticks()
             shootVector = Vector2()
             if keys[pygame.K_LEFT]:
                 shootVector.x -= 1
-                self.status['shootFace'] = 'left'
+                self.status["shootFace"] = "left"
             elif keys[pygame.K_RIGHT]:
                 shootVector.x += 1
-                self.status['shootFace'] = 'right'
+                self.status["shootFace"] = "right"
 
             if keys[pygame.K_UP]:
                 shootVector.y -= 1
-                self.status['shootFace'] = 'up'
+                self.status["shootFace"] = "up"
             elif keys[pygame.K_DOWN]:
                 shootVector.y += 1
-                self.status['shootFace'] = 'down'
+                self.status["shootFace"] = "down"
             if shootVector.magnitude() != 0:
                 shootVector = shootVector.normalize()
             self.shootDirection = shootVector
@@ -108,22 +112,34 @@ class Player(Entity):
 
     # 获取状态
     def get_status(self):
+        nowTime = pygame.time.get_ticks()
 
         # idle
         if self.direction.x == 0 and self.direction.y == 0:
-            if self.status['display'] != 'idle':
-                self.status['display'] = 'idle'
+            if self.status["display"] != "idle":
+                self.status["display"] = "idle"
 
         # shoot
         if self.shooting:
-            if self.status['display'] !='shoot':
-                self.status['display'] = 'shoot'
+            if self.status["display"] != "shoot":
+                self.status["display"] = "shoot"
+
+        if self.stopHurt and nowTime - self.hurtTime > 1500:
+            self.add(self.stopHurt)
+            self.stopHurt = False
 
     # 玩家射击
-    def shoot(self,speed):
-        x = self.rect.center[0] + 40*self.shootDirection.x
-        y = self.rect.center[1] + 40*self.shootDirection.y
-        Bullet(self.bulletSprites,(x,y),speed,self.bulletDamage,self.shootDirection,self)
+    def shoot(self, speed):
+        x = self.rect.center[0] + 20 * self.shootDirection.x
+        y = self.rect.center[1] + 20 * self.shootDirection.y
+        Bullet(
+            self.bulletSprites,
+            (x, y),
+            speed,
+            self.bulletDamage,
+            self.shootDirection,
+            self,
+        )
 
     # 射击冷却
     def cooldowns(self):
@@ -137,7 +153,6 @@ class Player(Entity):
     def animate(self):
         key = self.get_animation_key(self.status)
 
-
         # 动画loop
         self.frameIndex += self.animationSpeed
         if self.frameIndex >= 1:
@@ -145,7 +160,14 @@ class Player(Entity):
 
         # 设置图片
         self.image = self.imageList[key]
-        self.rect = self.image.get_rect(center = self.hitbox.center)
+        self.rect = self.image.get_rect(center=self.hitbox.center)
+
+    # 死亡操作
+    def set_status(self, signal, information):
+        if signal == "hurt":
+            self.stopHurt = information[0]
+            self.remove(information[0])
+            self.hurtTime = information[1]
 
     def update(self, dt):
         self.input()

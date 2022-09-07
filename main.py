@@ -18,8 +18,8 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            self.screen.fill('black')
-            dt = self.clock.tick() / 1000
+            self.screen.fill("black")
+            dt = self.clock.tick() / 100
             self.level.run(dt)
             pygame.display.update()
             self.clock.tick(FPS)

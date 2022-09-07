@@ -3,7 +3,9 @@ from config import *
 
 
 class AnimationSprite(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, imageList, animationSpeed=0.15,spriteType='staticbody'):
+    def __init__(
+        self, pos, groups, imageList, animationSpeed=0.15, spriteType="staticbody"
+    ):
         super().__init__(groups)
         self.imageList = imageList
         self.image = imageList[0]
@@ -14,8 +16,7 @@ class AnimationSprite(pygame.sprite.Sprite):
         self.hitbox = self.rect.inflate(0, -6 * SCALE_RATE)
 
     def __getattr__(self, _):
-            return None
-
+        return None
 
     def animate(self):
         # 动画loop
@@ -27,5 +28,5 @@ class AnimationSprite(pygame.sprite.Sprite):
         self.image = self.imageList[int(self.frameIndex)]
         self.rect = self.image.get_rect(center=self.hitbox.center)
 
-    def update(self,dt):
+    def update(self, dt):
         self.animate()

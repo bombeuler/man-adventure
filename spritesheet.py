@@ -3,9 +3,10 @@ from jsonconvert import JSONConvert
 from config import *
 from pygame.locals import SRCALPHA
 
+
 class SpriteSheet:
     def __init__(self, sheetName):
-        sheetPath = f'{ASSETS_PATH}/{sheetName}.png'
+        sheetPath = f"{ASSETS_PATH}/{sheetName}.png"
         sheetImage = pygame.image.load(sheetPath).convert_alpha()
         # sheetImage.set_colorkey(pygame.Color(0,0,0,255))
         self.sheet = sheetImage
@@ -15,11 +16,10 @@ class SpriteSheet:
 
     def __cut_one(self, rect, scale):
         rect = pygame.Rect(rect)
-        image = pygame.Surface(rect.size,SRCALPHA)
+        image = pygame.Surface(rect.size, SRCALPHA)
         image.blit(self.sheet, (0, 0), rect)
         (_, _, w, h) = rect
-        image = pygame.transform.scale(image,
-                                       (scale * w, scale * h))
+        image = pygame.transform.scale(image, (scale * w, scale * h))
         return image
 
     def loop_img(self, name, scale=2):

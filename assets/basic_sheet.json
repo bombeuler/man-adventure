@@ -63,7 +63,7 @@
     "duration": 100
    },
    {
-    "filename": "Cursors.zh-CN (eneny_dead).aseprite",
+    "filename": "Cursors.zh-CN (enemy_dead).aseprite",
     "frame": { "x": 240, "y": 32, "w": 96, "h": 16 },
     "rotated": false,
     "trimmed": true,
@@ -117,7 +117,7 @@
     "duration": 100
    },
    {
-    "filename": "Cursors.zh-CN (bullet).aseprite",
+    "filename": "Cursors.zh-CN (redead).aseprite",
     "frame": { "x": 208, "y": 80, "w": 64, "h": 16 },
     "rotated": false,
     "trimmed": true,
