@@ -15,7 +15,7 @@ ASSETS_PATH = os.path.abspath("./assets")
 # 玩家设置
 
 PLAYER_MAXSPEED = 5
-BULLET_MINSPEED = 2
+BULLET_MINSPEED = 4
 BULLET_MAXDISTANCE = SCALE_RATE * 400
 
 # 怪物设置

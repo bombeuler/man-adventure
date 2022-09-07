@@ -15,11 +15,11 @@ class Entity(pygame.sprite.Sprite):
         return None
 
     # 移动
-    def move(self, speed, stopMove=False):
+    def move(self, speed,dt, stopMove=False):
         if not stopMove:
-            self.hitbox.x += self.direction.x * speed
+            self.hitbox.x += self.direction.x * speed 
             self.collision("horizontal")
-            self.hitbox.y += self.direction.y * speed
+            self.hitbox.y += self.direction.y * speed 
             self.collision("vertical")
             self.rect.center = self.hitbox.center
 

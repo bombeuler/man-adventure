@@ -26,11 +26,16 @@ class Enemy(Entity):
         self.origin = self
         # 导入数据
         self.import_data()
-
-        self.imageList = monosterImage.get(self.name)
+        if self.name == 'turtle':
+            self.imageList = monosterImage.get(self.name)[0:2]
+        else:
+            self.imageList = monosterImage.get(self.name)
         self.deadImage = deadImage
         self.image = self.imageList[0]
         self.rect = self.image.get_rect(center=pos)
+
+        self.deadSound = pygame.mixer.Sound(f'{ASSETS_PATH}/shooted.ogg')
+        self.deadSound.set_volume(0.25)
 
         # 设置碰撞箱
         self.set_hitbox()
@@ -38,7 +43,7 @@ class Enemy(Entity):
     # 设置碰撞箱
     def set_hitbox(self):
         if self.fly:
-            self.hitbox = self.rect.inflate(-12 * SCALE_RATE, -12 * SCALE_RATE)
+            self.hitbox = self.rect.inflate(0, -2 * SCALE_RATE)
         else:
             self.hitbox = self.rect.inflate(0, -6 * SCALE_RATE)
 
@@ -66,9 +71,9 @@ class Enemy(Entity):
             self.direction = Vector2()
 
     # 飞行怪物特别移动方式
-    def fly_move(self, speed, stopMove=False):
+    def fly_move(self, speed, dt,stopMove=False):
         if not stopMove:
-            self.hitbox.x += self.direction.x * speed
+            self.hitbox.x += self.direction.x * speed 
             self.hitbox.y += self.direction.y * speed
             self.rect.center = self.hitbox.center
 
@@ -91,6 +96,7 @@ class Enemy(Entity):
 
     def set_status(self, signal, information):
         if signal == "death":
+            self.deadSound.play()
             self.remove(information)
             self.stopMove = True
             self.animationKind = "dead"
@@ -103,9 +109,9 @@ class Enemy(Entity):
 
     def update(self, dt):
         if self.fly:
-            self.fly_move(self.speed, self.stopMove)
+            self.fly_move(self.speed, dt,self.stopMove)
         else:
-            self.move(self.speed, self.stopMove)
+            self.move(self.speed, dt,self.stopMove)
         self.animate(dt)
         self.loop_status()
 
