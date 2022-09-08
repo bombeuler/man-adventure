@@ -44,6 +44,7 @@ class Level:
         self.obstaclesSprites = pygame.sprite.Group()  # 物理碰撞
         self.hurtingSprites = pygame.sprite.Group()  # 造成伤害
         self.hurtSprites = pygame.sprite.Group()  # 受到伤害
+        self.itemSprites = pygame.sprite.Group()  # 道具组
 
         # 精灵初始化
         self.create_map()
@@ -102,7 +103,7 @@ class Level:
     def spawn_enemy(self):
         nowTime = pygame.time.get_ticks()
         totalEnemy = 35
-        spawnEnemy = int(exp(2*(nowTime-self.startTime)/TOTAL_TIME))
+        spawnEnemy = int(exp(3*(nowTime-self.startTime)/TOTAL_TIME))
         if len([sprites for sprites in self.hurtingSprites if sprites.spriteType == 'enemy']) >=totalEnemy:
             return
         timeInterval = 2000
@@ -161,8 +162,8 @@ class Level:
 
     # 怪物选择区段
     def choose_enemy(self,nowTime,seed):
-        firstSheet = (70,15,14)
-        lastSheet = (25,50,20)
+        firstSheet = (70,15,13)
+        lastSheet = (25,45,20,)
         rate = (nowTime-self.startTime)/TOTAL_TIME
         e1 = lastSheet[0]+(firstSheet[0] - lastSheet[0]) * rate
         e2 = lastSheet[1]+(firstSheet[1] - lastSheet[1]) * rate
@@ -212,6 +213,7 @@ class Level:
         self.visibleSprites.custom_draw(self.player)
         self.visibleSprites.update(dt)
         self.visibleSprites.enemy_update(self.player)
+        self.visibleSprites.item_update(self.player)
         self.hurt_hurting_logic()
         self.ui.display(self.player)
 
@@ -260,3 +262,10 @@ class YSortCameraGroup(pygame.sprite.Group):
         ]
         for enemy in enemySprites:
             enemy.enemy_update(player)
+
+    def item_update(self,player):
+        itemSprites = [
+            sprite for sprite in self.sprites() if sprite.spriteType == "item"
+        ]
+        for item in itemSprites:
+            item.item_update(player)

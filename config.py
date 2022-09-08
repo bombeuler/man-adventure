@@ -29,6 +29,13 @@ monosterData = {
     "dragon": {"health": 8, "speed": 4, "damage": 2, "fly": True, "color": "red"},
 }
 
+# 游戏道具效果
+
+effectData = {
+    "speedup": {"influence": ["speed"], "imageIndex": 4},
+    "bulletspeedup": {"influence": ["shootingCooldown"], "imageIndex": 1},
+    "healthrecover": {"influence": ["health"], "imageIndex": 7},
+}
 #用户界面设置
 BAR_HEIGHT=16
 TIME_BAR_WIDTH=SCREEN_SIZE[0]//3
