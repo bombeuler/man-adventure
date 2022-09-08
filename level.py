@@ -10,6 +10,7 @@ from tilemap import TileMap
 from animationSprite import AnimationSprite
 from enemy import Enemy
 from random import random
+from ui import UI
 
 
 class Level:
@@ -30,6 +31,7 @@ class Level:
         self.greenDeadImg = self.basicSheet.loop_img("enemy_dead", SCALE_RATE)
         self.redDeadImg = self.basicSheet.loop_img("redead", SCALE_RATE)
         self.whiteImg = self.basicSheet.loop_img("movebroad", SCALE_RATE)
+        self.uiImg=self.basicSheet.loop_img("player_status", SCALE_RATE)
 
         # 精灵组
         self.visibleSprites = YSortCameraGroup()  # 可视组
@@ -41,6 +43,9 @@ class Level:
         self.create_map()
         self.startTime = pygame.time.get_ticks()
         self.spawnTime = pygame.time.get_ticks()
+
+        #用户界面
+        self.ui=UI(self.uiImg,self.startTime)
 
     # 初始化地图
     def create_map(self):
@@ -89,7 +94,7 @@ class Level:
 
     def spawn_enemy(self):
         nowTime = pygame.time.get_ticks()
-        totalEnemy = int(7*log1p(nowTime))
+        totalEnemy = int(2*log1p(nowTime))
         spawnEnemy = totalEnemy - len([sprites for sprites in self.hurtingSprites if sprites.spriteType == 'enemy'])
         timeInterval = 1000
         if nowTime - self.spawnTime >= timeInterval and spawnEnemy:
@@ -148,7 +153,7 @@ class Level:
         self.visibleSprites.update(dt)
         self.visibleSprites.enemy_update(self.player)
         self.hurt_hurting_logic()
-        debug(self.player.health)
+        self.ui.display(self.player)
 
 
 class YSortCameraGroup(pygame.sprite.Group):

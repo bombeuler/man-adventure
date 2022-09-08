@@ -24,10 +24,11 @@ class Player(Entity):
         self.speed = PLAYER_MAXSPEED  # 移动速度
         self.shootingCooldown = 400  # 子弹冷却
         self.bulletSpeed = BULLET_MINSPEED  # 射击速度
-        self.health = 4  # 生命值
+        self.health = MAX_HEALTH  # 生命值
         self.bulletDamage = 1
         self.stopHurt = False
         self.hurtTime = 0
+        self.score = 0
 
         # 射击
         self.shootDirection = Vector2()
