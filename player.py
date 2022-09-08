@@ -14,11 +14,17 @@ class Player(Entity):
         self.imageList = imageList
         self.image = self.imageList[2]
         self.rect = self.image.get_rect(center=pos)
-        self.hitbox = self.rect.inflate(0, -6 * SCALE_RATE)
+        self.hitbox = self.rect.inflate(-6, -6 * SCALE_RATE)
 
         # 状态和动画
         self.status = {"face": "down", "shootFace": "down", "display": "idle"}
         self.pos = Vector2(self.hitbox.center)
+
+        # 声音
+        self.shootSound = pygame.mixer.Sound(f'{ASSETS_PATH}/shoot.ogg')
+        self.shootSound.set_volume(0.25)
+        self.hurtSound = pygame.mixer.Sound(f'{ASSETS_PATH}/shooted.ogg')
+        self.hurtSound.set_volume(0.25)
 
         # 用户属性
         self.speed = PLAYER_MAXSPEED  # 移动速度
@@ -89,6 +95,7 @@ class Player(Entity):
             or keys[pygame.K_LEFT]
         ):
             self.shooting = True
+            self.shootSound.play()
             self.shootTime = pygame.time.get_ticks()
             shootVector = Vector2()
             if keys[pygame.K_LEFT]:
@@ -165,6 +172,7 @@ class Player(Entity):
     # 死亡操作
     def set_status(self, signal, information):
         if signal == "hurt":
+            self.hurtSound.play()
             self.stopHurt = information[0]
             self.remove(information[0])
             self.hurtTime = information[1]
@@ -174,4 +182,4 @@ class Player(Entity):
         self.cooldowns()
         self.get_status()
         self.animate()
-        self.move(self.speed)
+        self.move(self.speed,dt)
