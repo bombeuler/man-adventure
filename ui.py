@@ -44,7 +44,8 @@ class UI:
     
     # 用户得分
     def show_score(self,score):
-        
+        pass
+
     # 展示
     def display(self, player):
         self.draw_health_bar(player.health, MAX_HEALTH, self.imgList[0], self.imgList[2], (10, 10))
