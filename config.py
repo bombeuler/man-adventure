@@ -26,3 +26,11 @@ monosterData = {
     "bat": {"health": 1, "speed": 7, "damage": 1, "fly": True, "color": "red"},
     "dragon": {"health": 8, "speed": 4, "damage": 2, "fly": True, "color": "red"},
 }
+
+# 游戏道具效果
+
+effectData = {
+    "speedup": {"influence": ["speed"], "imageIndex": 4},
+    "bulletspeedup": {"influence": ["shootingCooldown"], "imageIndex": 1},
+    "healthrecover": {"influence": ["health"], "imageIndex": 7},
+}

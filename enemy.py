@@ -3,6 +3,7 @@ from random import random
 from config import *
 from entity import Entity
 from pygame.math import Vector2
+from item import Item
 from debug import debug
 
 
@@ -105,7 +106,10 @@ class Enemy(Entity):
         if self.animationKind == "dead":
             self.remainTime += 1
         if self.remainTime >= 100:
+            # Item(self.rect.center,)
             self.kill()
+
+
 
     def update(self, dt):
         if self.fly:
