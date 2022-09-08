@@ -3,6 +3,7 @@ from pygame.math import Vector2
 from config import *
 from bullet import Bullet
 from entity import Entity
+from pygame.locals import SRCALPHA
 
 
 class Player(Entity):
@@ -12,7 +13,21 @@ class Player(Entity):
         # 基本属性
         self.spriteType = "player"
         self.imageList = imageList
-        self.image = self.imageList[2]
+        self.body = self.imageList[2]
+
+        legList = []
+        for i in range(4):
+            rect = pygame.Rect((0,3*i*SCALE_RATE,16*SCALE_RATE,3*SCALE_RATE))
+            leg = pygame.Surface(rect.size,SRCALPHA).convert_alpha()
+            leg.blit(self.imageList[0],(0,0),rect)
+            legList.append(leg)
+        self.legs = legList
+        self.leg = self.legs[2]
+        print(legList[0])
+
+        # 连接身子跟腿
+        self.draw_player(self.body,self.leg)
+        self.legFrameIndex = 0
         self.rect = self.image.get_rect(center=pos)
         self.hitbox = self.rect.inflate(-6, -6 * SCALE_RATE)
 
@@ -43,6 +58,12 @@ class Player(Entity):
         self.shootTime = None
 
         self.bulletSprites = bulletSprites
+
+    def draw_player(self,body,leg):
+        image = pygame.Surface((16*SCALE_RATE,16*SCALE_RATE),SRCALPHA).convert_alpha()
+        image.blits([(body,(0,0)),(leg,(0,13*SCALE_RATE))])
+        self.image = image
+
 
     def get_animation_key(self, status):
         if self.shooting:
@@ -166,7 +187,17 @@ class Player(Entity):
             self.frameIndex = 0
 
         # 设置图片
-        self.image = self.imageList[key]
+        self.body = self.imageList[key]
+
+        # 腿的动画
+        if self.status["display"] == 'run':
+            self.legFrameIndex += self.animationSpeed
+            if self.legFrameIndex >= 4:
+                self.legFrameIndex = 0
+        self.leg = self.legs[int(self.legFrameIndex)]
+
+
+        self.draw_player(self.body,self.leg)
         self.rect = self.image.get_rect(center=self.hitbox.center)
 
     # 死亡操作

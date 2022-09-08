@@ -103,7 +103,7 @@ class Level:
     def spawn_enemy(self):
         nowTime = pygame.time.get_ticks()
         totalEnemy = 35
-        spawnEnemy = int(exp(3*(nowTime-self.startTime)/TOTAL_TIME))
+        spawnEnemy = int(exp(2*(nowTime-self.startTime)/TOTAL_TIME))
         if len([sprites for sprites in self.hurtingSprites if sprites.spriteType == 'enemy']) >=totalEnemy:
             return
         timeInterval = 2000
