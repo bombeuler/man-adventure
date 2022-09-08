@@ -44,6 +44,7 @@ class UI:
     
     # 用户得分
     def show_score(self,score):
+        pass
         
     # 展示
     def display(self, player):
