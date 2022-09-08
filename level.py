@@ -10,6 +10,7 @@ from tilemap import TileMap
 from animationSprite import AnimationSprite
 from enemy import Enemy
 from random import random
+from ui import UI
 
 
 class Level:
@@ -35,6 +36,7 @@ class Level:
         self.redDeadImg = self.basicSheet.loop_img("redead", SCALE_RATE)
         self.dragonDeadImg = self.basicSheet.loop_img("redead", 2 * SCALE_RATE)
         self.whiteImg = self.basicSheet.loop_img("movebroad", SCALE_RATE)
+        self.uiImg=self.basicSheet.loop_img("player_status", SCALE_RATE)
 
 
         # 精灵组
@@ -49,6 +51,9 @@ class Level:
         self.startTime = pygame.time.get_ticks()
         self.spawnTime = pygame.time.get_ticks()
         self.bgm.play()
+
+        #用户界面
+        self.ui=UI(self.uiImg,self.startTime)
 
     # 初始化地图
     def create_map(self):
@@ -210,6 +215,7 @@ class Level:
         self.visibleSprites.enemy_update(self.player)
         self.visibleSprites.item_update(self.player)
         self.hurt_hurting_logic()
+        self.ui.display(self.player)
 
 
 class YSortCameraGroup(pygame.sprite.Group):
