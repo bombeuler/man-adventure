@@ -4,7 +4,7 @@ from config import *
 
 class AnimationSprite(pygame.sprite.Sprite):
     def __init__(
-        self, pos, groups, imageList, animationSpeed=0.15, spriteType="staticbody"
+        self, pos, groups, imageList, animationSpeed=0.2, spriteType="staticbody"
     ):
         super().__init__(groups)
         self.imageList = imageList

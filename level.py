@@ -20,7 +20,7 @@ class Level:
         self.basicSheet = SpriteSheet("basic_sheet")
 
         # 音乐
-        self.bgm = pygame.mixer.Sound(f'{ASSETS_PATH}/bgm.ogg')
+        self.bgm = pygame.mixer.Sound(f"{ASSETS_PATH}/bgm.ogg")
         self.bgm.set_volume(0.2)
 
         # 储存怪物列表
@@ -36,8 +36,7 @@ class Level:
         self.redDeadImg = self.basicSheet.loop_img("redead", SCALE_RATE)
         self.dragonDeadImg = self.basicSheet.loop_img("redead", 2 * SCALE_RATE)
         self.whiteImg = self.basicSheet.loop_img("movebroad", SCALE_RATE)
-        self.uiImg=self.basicSheet.loop_img("player_status", SCALE_RATE)
-
+        self.uiImg = self.basicSheet.loop_img("player_status", SCALE_RATE)
 
         # 精灵组
         self.visibleSprites = YSortCameraGroup()  # 可视组
@@ -52,8 +51,8 @@ class Level:
         self.spawnTime = pygame.time.get_ticks()
         self.bgm.play()
 
-        #用户界面
-        self.ui=UI(self.uiImg,self.startTime)
+        # 用户界面
+        self.ui = UI(self.uiImg, self.startTime)
 
     # 初始化地图
     def create_map(self):
@@ -68,19 +67,19 @@ class Level:
                 if col != "-1":
                     x = colIndex * TILESIZE
                     y = rowIndex * TILESIZE
-                    if col == '71':
+                    if col == "71":
                         AnimationSprite(
                             (x, y),
                             [self.obstaclesSprites, self.visibleSprites],
                             bgImg[5:7],
                             0.05,
-                            )
+                        )
                     elif col == "73":
                         Tile(
                             (x, y),
                             [self.obstaclesSprites, self.visibleSprites],
                             bgImg[7],
-                            )
+                        )
                     elif col == "76":
                         Tile(
                             (x, y),
@@ -102,82 +101,96 @@ class Level:
 
     def spawn_enemy(self):
         nowTime = pygame.time.get_ticks()
-        totalEnemy = 35
-        spawnEnemy = int(exp(2*(nowTime-self.startTime)/TOTAL_TIME))
-        if len([sprites for sprites in self.hurtingSprites if sprites.spriteType == 'enemy']) >=totalEnemy:
+        totalEnemy = 30
+        spawnEnemy = int(exp(2 * (nowTime - self.startTime) / TOTAL_TIME))
+        if (
+            len(
+                [
+                    sprites
+                    for sprites in self.hurtingSprites
+                    if sprites.spriteType == "enemy"
+                ]
+            )
+            >= totalEnemy
+        ):
             return
-        timeInterval = 2000
+        timeInterval = 2000 / spawnEnemy
         if nowTime - self.spawnTime >= timeInterval and spawnEnemy:
-            for i in range(spawnEnemy):
-                enemySeed = 100*random()
-                posXSeed = 1600*(random()-0.5)
-                posYSeed = 1600*(random()-0.5)
-                enemyName = self.choose_enemy(nowTime,enemySeed)
-                playerPos = self.player.rect.center
-                enemyPosX = (posXSeed +800 if posXSeed>0 else posXSeed -800) + playerPos[0]
-                enemyPosY = (posYSeed +800 if posYSeed>0 else posYSeed -800) +playerPos[1]
-                enemyPos = (enemyPosX,enemyPosY)
-                if enemyName == 'creeper':
-                    Enemy(
-                    'creeper',
+            enemySeed = 100 * random()
+            posXSeed = 1600 * (random() - 0.5)
+            posYSeed = 1600 * (random() - 0.5)
+            enemyName = self.choose_enemy(nowTime, enemySeed)
+            playerPos = self.player.rect.center
+            enemyPosX = (
+                posXSeed + 800 if posXSeed > 0 else posXSeed - 800
+            ) + playerPos[0]
+            enemyPosY = (
+                posYSeed + 800 if posYSeed > 0 else posYSeed - 800
+            ) + playerPos[1]
+            enemyPos = (enemyPosX, enemyPosY)
+            if enemyName == "creeper":
+                Enemy(
+                    "creeper",
                     self.player,
                     self.monosterImages,
                     self.greenDeadImg,
                     enemyPos,
                     [self.visibleSprites, self.hurtSprites, self.hurtingSprites],
                     self.obstaclesSprites,
-                    )
-                elif enemyName == 'bat':
-                    Enemy(
-                    'bat',
+                )
+            elif enemyName == "bat":
+                Enemy(
+                    "bat",
                     self.player,
                     self.monosterImages,
                     self.redDeadImg,
                     enemyPos,
                     [self.visibleSprites, self.hurtSprites, self.hurtingSprites],
                     self.obstaclesSprites,
-                    )
-                elif enemyName == 'turtle':
-                    Enemy(
-                    'turtle',
+                )
+            elif enemyName == "turtle":
+                Enemy(
+                    "turtle",
                     self.player,
                     self.monosterImages,
                     self.greenDeadImg,
                     enemyPos,
                     [self.visibleSprites, self.hurtSprites, self.hurtingSprites],
                     self.obstaclesSprites,
-                    )
-                else:
-                    Enemy(
-                    'dragon',
+                )
+            else:
+                Enemy(
+                    "dragon",
                     self.player,
                     self.monosterImages,
                     self.dragonDeadImg,
                     enemyPos,
                     [self.visibleSprites, self.hurtSprites, self.hurtingSprites],
                     self.obstaclesSprites,
-                    )
-                
+                )
+
             self.spawnTime = nowTime
 
     # 怪物选择区段
-    def choose_enemy(self,nowTime,seed):
-        firstSheet = (70,15,13)
-        lastSheet = (25,45,20,)
-        rate = (nowTime-self.startTime)/TOTAL_TIME
-        e1 = lastSheet[0]+(firstSheet[0] - lastSheet[0]) * rate
-        e2 = lastSheet[1]+(firstSheet[1] - lastSheet[1]) * rate
-        e3 = lastSheet[2]+(firstSheet[2] - lastSheet[2]) * rate
-        if seed <=e1:
-            return 'creeper'
-        elif seed <=e1+e2:
-            return 'bat'
-        elif seed <=e1+e2+e3:
-            return 'turtle'
+    def choose_enemy(self, nowTime, seed):
+        firstSheet = (70, 15, 13)
+        lastSheet = (
+            25,
+            45,
+            20,
+        )
+        rate = (nowTime - self.startTime) / TOTAL_TIME
+        e1 = lastSheet[0] + (firstSheet[0] - lastSheet[0]) * rate
+        e2 = lastSheet[1] + (firstSheet[1] - lastSheet[1]) * rate
+        e3 = lastSheet[2] + (firstSheet[2] - lastSheet[2]) * rate
+        if seed <= e1:
+            return "creeper"
+        elif seed <= e1 + e2:
+            return "bat"
+        elif seed <= e1 + e2 + e3:
+            return "turtle"
         else:
-            return 'dragon'
-
-
+            return "dragon"
 
     # 攻击与被攻击逻辑
     def hurt_hurting_logic(self):
@@ -198,6 +211,8 @@ class Level:
         if damage >= nowHealth:
             self.hurtSprites.remove(targetSprite)
             targetSprite.health = 0
+            if monosterData.get(targetSprite.name):
+                self.player.score += monosterData.get(targetSprite.name)['score']
             targetSprite.set_status("death", self.hurtingSprites)
         else:
             targetSprite.health = nowHealth - damage
@@ -263,7 +278,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         for enemy in enemySprites:
             enemy.enemy_update(player)
 
-    def item_update(self,player):
+    def item_update(self, player):
         itemSprites = [
             sprite for sprite in self.sprites() if sprite.spriteType == "item"
         ]

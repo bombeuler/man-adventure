@@ -14,6 +14,7 @@ class Player(Entity):
         self.spriteType = "player"
         self.imageList = imageList
         self.body = self.imageList[2]
+        self.name = 'player'
 
         legList = []
         for i in range(4):
@@ -49,7 +50,7 @@ class Player(Entity):
         self.bulletDamage = 1
         self.stopHurt = False
         self.hurtTime = 0
-        self.score = 1000
+        self.score = 0
 
         # 射击
         self.shootDirection = Vector2()
@@ -190,7 +191,7 @@ class Player(Entity):
         self.body = self.imageList[key]
 
         # 腿的动画
-        if self.status["display"] == 'run':
+        if self.status["display"] != 'idle':
             self.legFrameIndex += self.animationSpeed
             if self.legFrameIndex >= 4:
                 self.legFrameIndex = 0
