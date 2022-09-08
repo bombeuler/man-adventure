@@ -1,5 +1,5 @@
 import pygame
-from random import random
+from random import random, randint
 from config import *
 from entity import Entity
 from pygame.math import Vector2
@@ -14,9 +14,11 @@ class Enemy(Entity):
         player,
         monosterImage,
         deadImage,
+        itemImage,
         pos,
         groups,
         obstacleSprites,
+        itemGroups,
     ):
         super().__init__(groups, obstacleSprites)
         self.animationSpeed = 0.1
@@ -25,9 +27,11 @@ class Enemy(Entity):
         self.name = moster_name
         self.player = player
         self.origin = self
+        self.itemGroups = itemGroups
+        self.itemImage = itemImage
         # 导入数据
         self.import_data()
-        if self.name == 'turtle':
+        if self.name == "turtle":
             self.imageList = monosterImage.get(self.name)[0:2]
         else:
             self.imageList = monosterImage.get(self.name)
@@ -35,7 +39,7 @@ class Enemy(Entity):
         self.image = self.imageList[0]
         self.rect = self.image.get_rect(center=pos)
 
-        self.deadSound = pygame.mixer.Sound(f'{ASSETS_PATH}/shooted.ogg')
+        self.deadSound = pygame.mixer.Sound(f"{ASSETS_PATH}/shooted.ogg")
         self.deadSound.set_volume(0.25)
 
         # 设置碰撞箱
@@ -72,9 +76,9 @@ class Enemy(Entity):
             self.direction = Vector2()
 
     # 飞行怪物特别移动方式
-    def fly_move(self, speed, dt,stopMove=False):
+    def fly_move(self, speed, dt, stopMove=False):
         if not stopMove:
-            self.hitbox.x += self.direction.x * speed 
+            self.hitbox.x += self.direction.x * speed
             self.hitbox.y += self.direction.y * speed
             self.rect.center = self.hitbox.center
 
@@ -106,16 +110,28 @@ class Enemy(Entity):
         if self.animationKind == "dead":
             self.remainTime += 1
         if self.remainTime >= 100:
-            # Item(self.rect.center,)
+            haveItemSeed = random()
+            if haveItemSeed <= ITEM_PROBABLY:
+                itemSeed = randint(1, WEIGHT_ALL)
+                offset = 0
+                for k, item in effectData.items():
+                    weight = item["weight"]
+                    if itemSeed <= offset + weight:
+                        effectName = k
+                        imgIndex = item['imageIndex']
+                        print(imgIndex)
+                        break
+                    else:
+                        offset += weight
+
+                Item(self.rect.center, self.itemGroups, self.itemImage[imgIndex], effectName)
             self.kill()
-
-
 
     def update(self, dt):
         if self.fly:
-            self.fly_move(self.speed, dt,self.stopMove)
+            self.fly_move(self.speed, dt, self.stopMove)
         else:
-            self.move(self.speed, dt,self.stopMove)
+            self.move(self.speed, dt, self.stopMove)
         self.animate(dt)
         self.loop_status()
 

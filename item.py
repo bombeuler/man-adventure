@@ -9,6 +9,9 @@ class Item(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
         self.effect = effect
 
+    def item_update(self, player):
+        super().update()
+
     def __getattr__(self, _):
         return None
 

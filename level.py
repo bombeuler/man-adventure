@@ -37,6 +37,7 @@ class Level:
         self.dragonDeadImg = self.basicSheet.loop_img("redead", 2 * SCALE_RATE)
         self.whiteImg = self.basicSheet.loop_img("movebroad", SCALE_RATE)
         self.uiImg = self.basicSheet.loop_img("player_status", SCALE_RATE)
+        self.itemImg = self.basicSheet.loop_img("buff",SCALE_RATE)
 
         # 精灵组
         self.visibleSprites = YSortCameraGroup()  # 可视组
@@ -134,9 +135,11 @@ class Level:
                     self.player,
                     self.monosterImages,
                     self.greenDeadImg,
+                    self.itemImg,
                     enemyPos,
                     [self.visibleSprites, self.hurtSprites, self.hurtingSprites],
                     self.obstaclesSprites,
+                    [self.visibleSprites, self.itemSprites],
                 )
             elif enemyName == "bat":
                 Enemy(
@@ -144,9 +147,11 @@ class Level:
                     self.player,
                     self.monosterImages,
                     self.redDeadImg,
+                    self.itemImg,
                     enemyPos,
                     [self.visibleSprites, self.hurtSprites, self.hurtingSprites],
                     self.obstaclesSprites,
+                    [self.visibleSprites, self.itemSprites],
                 )
             elif enemyName == "turtle":
                 Enemy(
@@ -154,9 +159,11 @@ class Level:
                     self.player,
                     self.monosterImages,
                     self.greenDeadImg,
+                    self.itemImg,
                     enemyPos,
                     [self.visibleSprites, self.hurtSprites, self.hurtingSprites],
                     self.obstaclesSprites,
+                    [self.visibleSprites, self.itemSprites],
                 )
             else:
                 Enemy(
@@ -164,9 +171,11 @@ class Level:
                     self.player,
                     self.monosterImages,
                     self.dragonDeadImg,
+                    self.itemImg,
                     enemyPos,
                     [self.visibleSprites, self.hurtSprites, self.hurtingSprites],
                     self.obstaclesSprites,
+                    [self.visibleSprites, self.itemSprites],
                 )
 
             self.spawnTime = nowTime
@@ -212,7 +221,7 @@ class Level:
             self.hurtSprites.remove(targetSprite)
             targetSprite.health = 0
             if monosterData.get(targetSprite.name):
-                self.player.score += monosterData.get(targetSprite.name)['score']
+                self.player.score += monosterData.get(targetSprite.name)["score"]
             targetSprite.set_status("death", self.hurtingSprites)
         else:
             targetSprite.health = nowHealth - damage
@@ -282,5 +291,6 @@ class YSortCameraGroup(pygame.sprite.Group):
         itemSprites = [
             sprite for sprite in self.sprites() if sprite.spriteType == "item"
         ]
-        for item in itemSprites:
-            item.item_update(player)
+        if itemSprites:
+            for item in itemSprites:
+                item.item_update(player)
