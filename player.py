@@ -34,7 +34,7 @@ class Player(Entity):
         self.bulletDamage = 1
         self.stopHurt = False
         self.hurtTime = 0
-        self.score = 0
+        self.score = 1000
 
         # 射击
         self.shootDirection = Vector2()
