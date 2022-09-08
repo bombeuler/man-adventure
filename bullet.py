@@ -4,19 +4,28 @@ from config import *
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, groups, pos, speed, damage, direction, origin):
+    def __init__(self,is_big, groups, pos, speed, damage, direction, origin):
         super().__init__(groups)
         self.spriteType = "bullet"
         self.fly = True
-        bulletImage = pygame.image.load(
+        if is_big:
+            bigBulletImage = pygame.image.load(
+            f"{ASSETS_PATH}/bigbullet.png"
+            ).convert_alpha()
+            self.image = pygame.transform.scale(
+            bigBulletImage, (SCALE_RATE * 16, SCALE_RATE * 16)
+            )
+            self.once = False
+        else:
+            bulletImage = pygame.image.load(
             f"{ASSETS_PATH}/real_bullet.png"
-        ).convert_alpha()
-        self.image = pygame.transform.scale(
+            ).convert_alpha()
+            self.image = pygame.transform.scale(
             bulletImage, (SCALE_RATE * 4, SCALE_RATE * 4)
-        )
+            )
+            self.once = True      
         self.rect = self.image.get_rect(center=pos)
         self.speed = speed
-        self.once = True
         self.damage = damage
         self.distance = 0
         self.direction = direction

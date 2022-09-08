@@ -9,6 +9,8 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
         pygame.display.set_caption(GAME_TITLE)
+        icon = pygame.image.load(f"{ASSETS_PATH}/icon.png").convert_alpha()
+        pygame.display.set_icon(icon)
         self.clock = pygame.time.Clock()
         self.level = Level()
 

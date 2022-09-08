@@ -48,9 +48,9 @@ class Enemy(Entity):
     # 设置碰撞箱
     def set_hitbox(self):
         if self.fly:
-            self.hitbox = self.rect.inflate(0, -2 * SCALE_RATE)
+            self.hitbox = self.rect.inflate(-6 *SCALE_RATE, -6 * SCALE_RATE)
         else:
-            self.hitbox = self.rect.inflate(0, -6 * SCALE_RATE)
+            self.hitbox = self.rect.inflate(-6 * SCALE_RATE, -12 * SCALE_RATE)
 
     # 导入数据
     def import_data(self):
@@ -109,7 +109,7 @@ class Enemy(Entity):
     def loop_status(self):
         if self.animationKind == "dead":
             self.remainTime += 1
-        if self.remainTime >= 100:
+        if self.remainTime >= 60:
             haveItemSeed = random()
             if haveItemSeed <= ITEM_PROBABLY:
                 itemSeed = randint(1, WEIGHT_ALL)

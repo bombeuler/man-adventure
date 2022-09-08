@@ -37,7 +37,7 @@ class Level:
         self.dragonDeadImg = self.basicSheet.loop_img("redead", 2 * SCALE_RATE)
         self.whiteImg = self.basicSheet.loop_img("movebroad", SCALE_RATE)
         self.uiImg = self.basicSheet.loop_img("player_status", SCALE_RATE)
-        self.itemImg = self.basicSheet.loop_img("buff",SCALE_RATE)
+        self.itemImg = self.basicSheet.loop_img("buff", SCALE_RATE)
 
         # 精灵组
         self.visibleSprites = YSortCameraGroup()  # 可视组
@@ -92,7 +92,7 @@ class Level:
 
         self.player = Player(
             (SCALE_RATE * 1600, SCALE_RATE * 1600),
-            [self.visibleSprites, self.hurtSprites],
+            [self.visibleSprites, self.hurtSprites, self.obstaclesSprites],
             self.obstaclesSprites,
             [self.visibleSprites, self.hurtingSprites],
             playerImg,
@@ -102,8 +102,8 @@ class Level:
 
     def spawn_enemy(self):
         nowTime = pygame.time.get_ticks()
-        totalEnemy = 30
-        spawnEnemy = int(exp(2 * (nowTime - self.startTime) / TOTAL_TIME))
+        totalEnemy = 35
+        spawnEnemy = max(int(exp(2 * (nowTime - self.startTime) / TOTAL_TIME)), 2)
         if (
             len(
                 [
@@ -189,9 +189,9 @@ class Level:
             20,
         )
         rate = (nowTime - self.startTime) / TOTAL_TIME
-        e1 = lastSheet[0] + (firstSheet[0] - lastSheet[0]) * rate
-        e2 = lastSheet[1] + (firstSheet[1] - lastSheet[1]) * rate
-        e3 = lastSheet[2] + (firstSheet[2] - lastSheet[2]) * rate
+        e1 = firstSheet[0] + (lastSheet[0] - firstSheet[0]) * rate
+        e2 = firstSheet[1] + (lastSheet[1] - firstSheet[1]) * rate
+        e3 = firstSheet[2] + (lastSheet[2] - firstSheet[2]) * rate
         if seed <= e1:
             return "creeper"
         elif seed <= e1 + e2:
@@ -240,6 +240,7 @@ class Level:
         self.visibleSprites.item_update(self.player)
         self.hurt_hurting_logic()
         self.ui.display(self.player)
+        debug((self.player.shootingCooldown, self.player.speed, self.player.stopHurt,self.player.bigBullets))
 
 
 class YSortCameraGroup(pygame.sprite.Group):
@@ -277,8 +278,9 @@ class YSortCameraGroup(pygame.sprite.Group):
     def sort_by(self, sprites):
         sorted1 = sorted(sprites, key=lambda sprite: sprite.rect.centery)
         sorted2 = sorted(sorted1, key=lambda sprite: 1 if sprite.fly else 0)
+        sorted3 = sorted(sorted2, key=lambda sprite: spriteOrder.get(sprite.spriteType))
 
-        return sorted2
+        return sorted3
 
     def enemy_update(self, player):
         enemySprites = [
