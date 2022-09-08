@@ -11,6 +11,7 @@ from animationSprite import AnimationSprite
 from enemy import Enemy
 from random import random
 from ui import UI
+from menu import Menu
 
 
 class Level:
@@ -18,6 +19,7 @@ class Level:
         # 获取显示表面
         self.displaySurface = pygame.display.get_surface()
         self.basicSheet = SpriteSheet("basic_sheet")
+        self.gameRun = False
 
         # 音乐
         self.bgm = pygame.mixer.Sound(f'{ASSETS_PATH}/bgm.ogg')
@@ -208,14 +210,16 @@ class Level:
         if hurtingSprite.once:
             hurtingSprite.kill()
 
+
     def run(self, dt):
-        self.spawn_enemy()
         self.visibleSprites.custom_draw(self.player)
+        self.ui.display(self.player)
+        self.spawn_enemy()
         self.visibleSprites.update(dt)
         self.visibleSprites.enemy_update(self.player)
         self.visibleSprites.item_update(self.player)
         self.hurt_hurting_logic()
-        self.ui.display(self.player)
+        
 
 
 class YSortCameraGroup(pygame.sprite.Group):
