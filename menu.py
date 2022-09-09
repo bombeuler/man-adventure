@@ -12,8 +12,10 @@ class Menu:
         # self.displaySurface.blit(bg, (0,0))
         gameTitle = self.bigFont.render("荒漠求生",False, 'white')
         text=self.font.render("按下空格开始游戏", False, 'yellow')
+        tips=self.font.render(f"WASD进行移动,上下左右方向键进行射击", False, 'white')
 
         self.displaySurface.blit(gameTitle, (self.displaySurface.get_size()[0] // 2 - gameTitle.get_width()//2, 150))
+        self.displaySurface.blit(tips, (self.displaySurface.get_size()[0] // 2 - tips.get_width()//2, 250))
         self.displaySurface.blit(text, (self.displaySurface.get_size()[0] // 2 - text.get_width()//2,400))
     
     def show_success(self):
