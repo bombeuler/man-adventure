@@ -4,7 +4,6 @@ from config import *
 from entity import Entity
 from pygame.math import Vector2
 from item import Item
-from debug import debug
 
 
 class Enemy(Entity):
@@ -119,7 +118,6 @@ class Enemy(Entity):
                     if itemSeed <= offset + weight:
                         effectName = k
                         imgIndex = item['imageIndex']
-                        print(imgIndex)
                         break
                     else:
                         offset += weight

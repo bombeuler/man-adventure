@@ -24,7 +24,6 @@ class Player(Entity):
             legList.append(leg)
         self.legs = legList
         self.leg = self.legs[2]
-        print(legList[0])
 
         # 连接身子跟腿
         self.draw_player(self.body, self.leg)
@@ -55,8 +54,8 @@ class Player(Entity):
         # 射击
         self.shootDirection = Vector2()
         self.shooting = False
-        self.fiveBullets = 5
-        self.bigBullets = 3
+        self.fiveBullets = 0
+        self.bigBullets = 0
 
         self.shootTime = None
 

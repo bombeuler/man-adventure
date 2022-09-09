@@ -15,6 +15,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.menu = Menu()
         self.gameRun = False
+        self.showMenu = False
 
     def run(self):
         while True:
@@ -23,16 +24,24 @@ class Game:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
-                    if event.key ==pygame.K_m:
+                    if event.key ==pygame.K_SPACE and (not self.gameRun):
                         self.gameRun = True
+                        self.showMenu = False
                         self.level = Level()
-                        print("11")
-            self.screen.fill("black")
+            # self.screen.fill("black")
             dt = self.clock.tick() / 100
-            if self.gameRun:
+            if self.gameRun and hasattr(self,"level") and self.level.gameStatus =="run":
                 self.level.run(dt)
-            else:
-                self.menu.display("win",34)
+            elif hasattr(self,"level") and self.level.gameStatus !="run" and (not self.showMenu):
+                score = self.level.player.score
+                self.menu.display(self.level.gameStatus,score)
+                self.level.bgm.stop()
+                self.showMenu = True
+                self.__delattr__('level')
+                self.gameRun = False
+            elif not self.showMenu:
+                self.menu.display("start",0)
+                self.showMenu = True
             pygame.display.update()
             self.clock.tick(FPS)
 

@@ -5,13 +5,11 @@ from config import *
 from spritesheet import SpriteSheet
 from player import Player
 from tile import Tile
-from debug import debug
 from tilemap import TileMap
 from animationSprite import AnimationSprite
 from enemy import Enemy
 from random import random
 from ui import UI
-from menu import Menu
 
 
 class Level:
@@ -19,7 +17,7 @@ class Level:
         # 获取显示表面
         self.displaySurface = pygame.display.get_surface()
         self.basicSheet = SpriteSheet("basic_sheet")
-        self.gameRun = False
+        self.gameStatus = "run"
 
         # 音乐
         self.bgm = pygame.mixer.Sound(f"{ASSETS_PATH}/bgm.ogg")
@@ -104,6 +102,9 @@ class Level:
 
     def spawn_enemy(self):
         nowTime = pygame.time.get_ticks()
+        # 胜利
+        if nowTime - self.startTime >=TOTAL_TIME:
+            self.gameStatus = "win"
         totalEnemy = 35
         spawnEnemy = max(int(exp(2 * (nowTime - self.startTime) / TOTAL_TIME)), 2)
         if (
@@ -224,6 +225,8 @@ class Level:
             targetSprite.health = 0
             if monosterData.get(targetSprite.name):
                 self.player.score += monosterData.get(targetSprite.name)["score"]
+            elif targetSprite.name == "player":
+                self.gameStatus = "lost"
             targetSprite.set_status("death", self.hurtingSprites)
         else:
             targetSprite.health = nowHealth - damage
@@ -233,7 +236,6 @@ class Level:
                 )
         if hurtingSprite.once:
             hurtingSprite.kill()
-
 
     def run(self, dt):
         self.visibleSprites.custom_draw(self.player)
