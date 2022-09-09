@@ -47,9 +47,9 @@ class Enemy(Entity):
     # 设置碰撞箱
     def set_hitbox(self):
         if self.fly:
-            self.hitbox = self.rect.inflate(-6 *SCALE_RATE, -6 * SCALE_RATE)
+            self.hitbox = self.rect.inflate(-6 * SCALE_RATE, -6 * SCALE_RATE)
         else:
-            self.hitbox = self.rect.inflate(-6 * SCALE_RATE, -12 * SCALE_RATE)
+            self.hitbox = self.rect.inflate(-4 * SCALE_RATE, -8 * SCALE_RATE)
 
     # 导入数据
     def import_data(self):
@@ -117,12 +117,17 @@ class Enemy(Entity):
                     weight = item["weight"]
                     if itemSeed <= offset + weight:
                         effectName = k
-                        imgIndex = item['imageIndex']
+                        imgIndex = item["imageIndex"]
                         break
                     else:
                         offset += weight
 
-                Item(self.rect.center, self.itemGroups, self.itemImage[imgIndex], effectName)
+                Item(
+                    self.rect.center,
+                    self.itemGroups,
+                    self.itemImage[imgIndex],
+                    effectName,
+                )
             self.kill()
 
     def update(self, dt):
