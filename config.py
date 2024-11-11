@@ -8,7 +8,7 @@ SCREEN_SIZE = (1200, 800)  # 25,25
 GAME_TITLE = "荒漠求生"
 FPS = 60
 TOTAL_TIME = 60000
-ITEM_PROBABLY = 0.3
+ITEM_PROBABLY = 0.2
 
 # 精灵顺序
 spriteOrder = {
